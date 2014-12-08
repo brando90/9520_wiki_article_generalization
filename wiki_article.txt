@@ -55,7 +55,7 @@ One immediate argument that one could hold against such a theoretical result is 
 
 Recall tikhonov regularization to be:
 
-<math> f^{\lambda}_{S}  = arg \min_{f \ \mathcal{H}} \left(      \frac{1}{n} \sum^n_{i=1} V(f(x_i) , y_i) + \lambda ||f||^2_{\mathbb{R}^k}     \right) </math>
+<math> f^{\lambda}_{S}  = arg \min_{f \in \mathcal{H}} \left(      \frac{1}{n} \sum^n_{i=1} V(f(x_i) , y_i) + \lambda ||f||^2_{\mathbb{R}^k}     \right) </math>
 
 it can be shown that tikhonov regularization is uniformly stable. If that is true then tikhonov regularization is proved to generalize.
 
@@ -67,7 +67,15 @@ To prove that Tikhonov regularization is stable we only need to show these three
 
 3) finally we need the following lemma to hold: <math> ||f^{\lambda}_{S} - f^{\lambda}_{S^{i,z}} ||^2_{\mathbb{R}^K} \leq \frac{L||f^{\lambda}_S - f^{\lambda}_{S^{i,z}} ||_{\infty} }{\lambda n} </math>
 
+If the above holds and the loss function is upper bounded by M, then the generalization bound has the following form:
 
+<math> |I[f^{\lambda}_{S}] - I_S[f^{\lambda}_S]| \leq \frac{L^2\kappa^2}{\lambda n} + (\frac{2L^2\kappa^2}{\lambda n} +M) \sqrt{\frac{2ln(\frac{2}{\delta} ) }{n} } </math>
+
+Therefore, with confidence <math> 1 - \delta </math>, tikhonov regularization generalizes as n goes to infinity.
+
+==== Remarks on Bound ====
+
+Notice that keeping <math>\lambda</math> fixed as n increases, the generalization tightens as <math> O \left( \frac{1}{n} \right) </math>.  However, fixing <math>\lambda</math> keeps our hypothesis spaced fixed. However, as we get more data, we want <math>\lambda</math> to get smaller. However, if <math>\lambda</math> gets smaller too quickly, then the bounds have the potential to become vacuous.
 
 == Statement ==
 
@@ -188,4 +196,6 @@ Which concludes the proof of the lemma and shows that with confidence <math> 1 -
 
 = References =
 
-<ref> Lorenzo Rosasco, Tomaso Poggio: "Class slides Stability": http://www.mit.edu/~9.520/fall14/slides/class15/class15_stability.pdf</ref>
+<ref> Lorenzo Rosasco, Tomaso Poggio: "Class slides on Stability": http://www.mit.edu/~9.520/fall14/slides/class15/class15_stability.pdf</ref>
+<ref> Lorenzo Rosasco, Tomaso Poggio: "Class slides on Stability of Tikhonov ": http://www.mit.edu/~9.520/fall14/slides/class16/class16_stability.pdf</ref>
+<ref> Lorenzo Rosasco, Tomaso Poggio: "9.520: Statistical Learning Theory and Applications Fall 2014": http://www.mit.edu/~9.520/fall14/</ref>

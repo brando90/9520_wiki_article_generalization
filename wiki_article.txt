@@ -42,9 +42,78 @@ where <math> \epsilon(n)</math> will be an upper bound that approaches zero as n
 
 === Proof ===
 
-We know that our learning algorithm <math> L </math> is uniformly stable and that each training data point <math> z_i \in S </math>:
+If a learning algorithm<math> L </math> is uniformly stable, then using McDirmid's inequality, the generalization error will be close to the expected generalization error over training sets with high probability. i.e. :
 
-<math> \forall i I[f_S] - I_S[f_S] </math>
+<math>\forall (S, z) \in Z^{n+1}, \forall i \in \{1,...,n\}, \sup_{z' \in Z} | V(f_S , z' )-V(f_{S^{i,z} } , z' )|\leq\beta  \implies P( |I[f_S] - \mathbb{E}_S[f_S]|  \geq \epsilon ) \leq 2 e^{ \left( \frac{-2 \epsilon^2}{n \beta^2} \right) }</math>
+
+if we change the above probability statement to its confidence form and demand to have <math> 1 - \delta </math> confidence that <math> I[f_S] </math> and <math> \mathbb{E}_S[f_S] </math> are close then after some lines of algebra its easy to verify that <math> \epsilon </math> must be at most:
+
+<math> e = n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+
+Therefore, we must have with confidence <math> 1 - \delta </math> that:
+
+<math> |I[f_S] - \mathbb{E}_S[f_S]|  \leq n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } }  \implies I[f_S]  \leq \mathbb{E}_S[f_S]  +  n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+
+The above statement is an upper bound on the generalization error, which can be turned into the desired bound (i.e. one bounding the difference of the empirical risk and generalization error) easily by subtracting the empirical risk <math> I_S[f_S] </math> from both sides of the inequality yielding:
+
+<math> I[f_S]  - I_S[f_S] \leq \mathbb{E}_S[f_S] - I_S[f_S]  +  n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+
+the LHS is exactly what we need to conclude the proof, however we need to finish upper bounding the RHS, specifically we need to upper bound <math> I[f_S]  - I_S[f_S] </math> to conclude the proof.
+
+The upper bound for <math> \mathbb{E}_S[f_S] - I_S[f_S] </math> is exactly:
+
+<math> \mathbb{E}_S[f_S] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+
+where M is the upper on the loss function <math> V(f, z) </math>.
+
+If that is true then the proof concludes that:
+
+<math> I[f_S] - I_S[f_S] \leq \beta + (2n\beta + M) \sqrt{ \frac{ ln(   \frac{2}{\delta}  ) }{2n} }</math>
+
+Which gives the desired upper bound.
+
+We will finish the proof by proving the following lemma:
+
+==== Lemma ====
+
+For a bounded loss function <math> V(f, z) </math> (with upper bound M) and a uniformly stable learning algorithm the following upper bound holds with confidence <math> 1 - \delta</math>
+
+<math> \mathbb{E}_S[f_S] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+
+===== Proof =====
+
+Similarly as we used McDirmid's inequality in the previous proof, we will do it again but this time let the functional F in McDirmid's be <math> I_S[f_S] </math>.
+If that is our choice of functional then we must show the following
+
+<math> \forall i, \sup_{S, z} |I_S[f_S] - I_S[f_S^{i,z}]| \leq c_i</math>
+
+if we want a probabilistic upper bound on <math> \mathbb{E}_S[I_S[f_S]] </math>.
+
+Let's start finding an upper bound <math> c_i </math> by considering the LHS of the above inequality:
+
+<math> \forall i, \sup_{S, z} |I_S[f_S] - I_S[f_S^{i,z}]| = |\frac{1}{n}\sum^n_{i=1} V(f_s , z_i) - (\frac{1}{n} \sum_{j \neq i} V(f_{S^{i,z}} , z_j) + \frac{1}{n} V(f_{S^{i,z}},z) )   | </math>
+
+by triangle inequality and pairing up the samples points <math> z_i \neq z_j </math> in the summations we get:
+
+<math>  \leq \frac{1}{n} \sum_{j \neq i} |V(f_S, z_j) - V(f_{S^{i,z}} , z_j)| + \frac{1}{n} | V(f_S, z_i) - V(f_{S^{i,z}} , z ) |</math>
+
+The divided the terms that way because the first term <math> V(f_S, z_j) - V(f_{S^{i,z}} , z_j) </math> can be upper bounded by <math> \beta </math> because of the stability of our learning algorithm.
+
+<math> V(f_S, z_j) - V(f_{S^{i,z}} , z_j) \leq \beta</math>
+
+and the second term can only be bounded by the the upper bound of the loss function (because we are evaluating the loss at two different points with different training points):
+
+<math> V(f_S, z_i) - V(f_{S^{i,z}} , z) \leq M</math>
+
+Combining both yields:
+
+<math> \leq \frac{n-1}{n} \beta + \frac{M}{n}  \leq \beta + \frac{M}{n}</math>
+
+With this last result we can apply McDirmid's inequality and the constants <math> c_i</math> at the beginning of the lemma are <math>\beta + \frac{M}{n} </math>:
+
+<math> \forall i, \sup_{S, z} |I_S[f_S] - I_S[f_S^{i,z}]| \leq \beta + \frac{M}{n} \implies Pr[|I_S[f_S] - \mathbb{E}_S[  I_S[f_S]] | geq \epsilon ] \leq 2 e^{\frac{-2n \epsilon^2}{(n\beta + M)^2} } </math>
+
+
 
 == Final Result ==
 

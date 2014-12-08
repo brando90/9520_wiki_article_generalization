@@ -3,17 +3,57 @@
 
 ==Uniform Stability and Generalization of a Learning Algorithm==
 
-If a learning Algorithm <math>L </math> is uniformly stable as defined in the previous section, then it will generalize. In other words, if the algorithm is resistant to small perturbations in the training set as defined by uniform stability, then we can mathematically show that the algorithm will be able to predict well sample points that are inside our training set as well as the samples not in it.
+If a learning Algorithm <math>L </math> is uniformly stable as defined in the previous section, then it will generalize.
+In other words, if the algorithm is resistant to small perturbations in the training set as defined by uniform stability,
+then we can mathematically show that the algorithm will be able to predict well sample points that are inside our training set
+as well as the samples not in it.
 
 == Motivation ==
 
 Why would someone want their learning algorithm to be stable in any sense?
-One can intuitively motivate the concept of stability with the analogy of a scientific theory, where the power of our predictor lies in the predictive power of the scientific theory.
-If we had a good scientific theory and thus a good predictor, then it should have been able to see general trends in the data that inspired this theory.
-In other words, small changes to the data that inspired this theory, should not affect the theory as a whole to much, because the theory was able to extract the general trends effectively in a predictive manner.
+One can intuitively motivate the concept of stability with the analogy of a scientific theory, where the power of our predictor lies
+in the predictive power of the scientific theory.
+If we had a good scientific theory and thus a good predictor, then it should have been able to see general trends in the data that
+inspired this theory.
+In other words, small changes to the data that inspired this theory, should not affect the theory as a whole to much, because the
+theory was able to extract the general trends effectively in a predictive manner.
 If it was a good theory in the first place, then small changes in the training data should not affect its success to predict unseen data samples.
-Similarly, if we have a learning algorithm that is able to generalize on unseen data points, then if the algorithm was "good" at learning from the data it had,
+Similarly, if we have a learning algorithm that is able to generalize on unseen data points, then if the algorithm was "good" at
+learning from the data it had,
 then small perturbations on that data should not affect its predictive power too much.
 This intuitive idea can actually be made mathematically rigorous with uniform stability.
-If a learning algorithm is (uniformly) stable then, from the previous argument, it makes sense that it should have good predictive power on data it has already seen
+If a learning algorithm is (uniformly) stable then, from the previous argument, it makes sense that it should have good predictive power
+on data it has already seen
 and data it has not yet seen. i.e. if the learning algorithm is stable, it should be able to generalize.
+
+== Statement ==
+
+If a learning algorithm <math>L </math> is uniformly stable, then as the number of training points approaches infinity the empirical risk approaches the generalization error with high probability i.e.
+
+<math> \lim_{n \to \infty} I_S[f_S] = I[f_S] </math>
+
+with high probability.
+
+Therefore, our goal will be to show that if uniform stability holds for <math>L </math>, then the difference between the empirical error and the generalization error will go to zero with high probability i.e.:
+
+<math> Pr[ | I_S[f_S] - I[f_S] | \leq \epsilon(n) ] \geq 1 - \delta</math>
+
+where <math> \epsilon(n)</math> will be an upper bound that approaches zero as n approaches infinity.
+
+=== Proof ===
+
+We know that our learning algorithm <math> L </math> is uniformly stable and that each training data point <math> z_i \in S </math>:
+
+<math> \forall i I[f_S] - I_S[f_S] </math>
+
+== Final Result ==
+
+If a learning algorithm <math>L </math> is uniformly stable and also has a bounded loss function, then with confidence <math> 1 - \delta </math>  the difference between the empirical risk and the generalization error will be upper bounded as follows:
+
+<math> I[f_S] - I_S[f_S] \leq \beta_n + (2n\beta_n + M) \sqrt{ \frac{ ln(   \frac{2}{\delta}  ) }{2n} }</math>
+
+Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{n} \right) </math>, then the upper bound becomes:
+
+<math> I[f_S] - I_S[f_S] \leq O\left( \frac{ 1 }{ n } \right)</math>
+
+which clearly generalizes as n approaches infinity because the difference between the generalization error and empirical risk goes to zero.

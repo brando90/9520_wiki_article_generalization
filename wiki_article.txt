@@ -5,7 +5,7 @@
 
 If a learning Algorithm <math>L </math> is uniformly stable as defined in the previous section, then it will generalize.
 In other words, if the algorithm is resistant to small perturbations in the training set as defined by uniform stability,
-then we can mathematically show that the algorithm will be able to predict well sample points that are inside our training set
+then we can mathematically show that the algorithm will be able to make good predictions on sample points that are inside our training set
 as well as the samples not in it.
 
 == Motivation ==
@@ -25,6 +25,49 @@ This intuitive idea can actually be made mathematically rigorous with uniform st
 If a learning algorithm is (uniformly) stable then, from the previous argument, it makes sense that it should have good predictive power
 on data it has already seen
 and data it has not yet seen. i.e. if the learning algorithm is stable, it should be able to generalize.
+
+== Final Result ==
+
+If a learning algorithm <math>L </math> is uniformly stable and also has a bounded loss function, then with confidence <math> 1 - \delta </math>  the difference between the empirical risk and the generalization error will be upper bounded as follows:
+
+<math> I[f_S] - I_S[f_S] \leq \beta_n + (2n\beta_n + M) \sqrt{ \frac{ ln(   \frac{2}{\delta}  ) }{2n} }</math>
+
+Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{n} \right) </math>, then the upper bound becomes:
+
+<math> I[f_S] - I_S[f_S] \leq O\left( \frac{ 1 }{ n } \right)</math>
+
+which clearly approaches zero as n approaches infinity. Therefore, the empirical risk is equal to the generalization error for sufficiently large and thus, the empirical risk is a good proxy for the generalization error. In this case, we say that the learning algorithm generalizes.
+
+=== Remarks ===
+
+==== Why minimizing the empirical risk is a good idea for large training sets ====
+Notice that this result is basically saying that for sufficiently large n, the empirical risk and the generalization error are approximately equal. Therefore, this means that given enough training data, finding a predictor that minimizes the empirical risk will actually also minimize the generalization error. Therefore, for a stable learning algorithm, minimizing the empirical risk is actually a good procedure for minimizing generalization (since the two are approximately equal for sufficiently large n).
+
+Unfortunately, this is obviously an asymptotic bound and therefore, large values of n are needed. However, this result does justify why minimizing the empirical risk for large training sets might be a good idea.
+
+==== Justification for bounded loss function ====
+
+One immediate argument that one could hold against such a theoretical result is an argument against the bounded loss function. In reality, we never choose a bounded loss function. For example, the squared loss, is not bounded for all values on the real line. However, the important argument made to justify such an argument is that in reality, we will never actually expect to observe every value of the real line. Within a realistic domain of values that any reasonable training set might have, we will observe finite bounded numbers <math> z </math>. Therefore, since we don't expect to get any value of the real line, we approximately have a bounded loss function.
+
+== Example of a Uniformly Stable==
+
+=== Tikhonov Regularization ===
+
+Recall tikhonov regularization to be:
+
+<math> f^{\lambda}_{S}  = arg \min_{f \ \mathcal{H}} \left(      \frac{1}{n} \sum^n_{i=1} V(f(x_i) , y_i) + \lambda ||f||^2_{\mathbb{R}^k}     \right) </math>
+
+it can be shown that tikhonov regularization is uniformly stable. If that is true then tikhonov regularization is proved to generalize.
+
+To prove that Tikhonov regularization is stable we only need to show these three statements to be true:
+
+1) we assue that the loss is Lipschitz continuous: <math> |V(f_i(x), y') - V(f_2(x), y')| \leq L||f_1 - f_2 ||_{\infty} </math>
+
+2) we need that the hypothesis class to be over reproducing kernel Hilbert spaces (RKHS): <math> ||f - f'||_{\infty} \leq \mathcal{k} ||f - f'||_{\mathbb{R}^K} </math> for any <math>f,f' \in \mathcal{H} </math>
+
+3) finally we need the following lemma to hold: <math> ||f^{\lambda}_{S} - f^{\lambda}_{S^{i,z}} ||^2_{\mathbb{R}^K} \leq \frac{L||f^{\lambda}_S - f^{\lambda}_{S^{i,z}} ||_{\infty} }{\lambda n} </math>
+
+
 
 == Statement ==
 
@@ -64,7 +107,7 @@ The upper bound for <math> \mathbb{E}_S[I[f_S]] - I_S[f_S] </math> is exactly:
 
 <math> \mathbb{E}_S[I[f_S]] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
 
-where M is the upper on the loss function <math> V(f, z) </math>.
+where M is the upper bound on the loss function <math> V(f, z) </math>.
 
 If that is true then the proof concludes that:
 
@@ -78,18 +121,18 @@ We will finish the proof by proving what we need in the following lemma:
 
 For a bounded loss function <math> V(f, z) </math> (with upper bound M) and a uniformly stable learning algorithm the following upper bound holds with confidence <math> 1 - \delta</math>
 
-<math> \mathbb{E}_S[f_S] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+<math> \mathbb{E}_S[I[f_S]] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
 
 ===== Proof =====
 
-Similarly as we used McDirmid's inequality in the previous proof, we will do it again but this time let the functional F in McDirmid's be <math> I_S[f_S] </math>.
-If that is our choice of functional then we must show the following
+Notice that the above statement is the difference of <math> I_S[f_S] </math> and the expected value of a different quanity. This suggests that setting <math> I_S[f_S]</math> to be the functional in McDirmids inequality might be good first step to yield the above result. Thus, we wull use McDirmid's inequality and let the functional F in McDirmid's be <math> I_S[f_S] </math>.
+If that is our choice of functional then we must show the following first
 
 <math> \forall i, \sup_{S, z} |I_S[f_S] - I_{S^{i,z} }[f_{S^{i,z}}]| \leq c_i</math>
 
-if we want a probabilistic upper bound on <math> \mathbb{E}_S[I_S[f_S]] </math>.
+if we want the probabilistic upper bound on <math> \mathbb{E}_S[I_S[f_S]] </math> to hold.
 
-Let's search for the upper bound on <math> c_i </math> by considering the LHS of the above inequality and expanding it:
+Let's search for the upper bound <math> c_i </math> by considering the LHS of the above inequality and expanding it:
 
 <math> \forall i, \sup_{S, z} |I_S[f_S] - I_{S^{i,z} }[f_S^{i,z}]| = |\frac{1}{n}\sum^n_{i=1} V(f_s , z_i) - (\frac{1}{n} \sum_{j \neq i} V(f_{S^{i,z}} , z_j) + \frac{1}{n} V(f_{S^{i,z}},z) )   | </math>
 
@@ -109,26 +152,40 @@ Combining both terms yields the desired upper bound (to use McDirmad's afterward
 
 <math> \leq \frac{n-1}{n} \beta + \frac{M}{n}  \leq \beta + \frac{M}{n}</math>
 
-With this last result we can apply McDirmid's inequality and the constants <math> c_i</math> at the beginning of the lemma are <math>\beta + \frac{M}{n} </math>:
+With this last result we can apply McDirmid's inequality and the constants <math> c_i</math> at the beginning of the lemma are <math>\beta + \frac{M}{n}, \forall i</math>. Thus we have:
 
-<math> \forall i, \sup_{S, z} |I_S[f_S] - I_S^{{i,z}}[f_S^{i,z}]| \leq \beta + \frac{M}{n} \implies Pr[|I_S[f_S] - \mathbb{E}_S[  I_S[f_S]] | \geq \epsilon ] \leq 2 e^{\frac{-2n \epsilon^2}{(n\beta + M)^2} } </math>
+<math> \forall i, \sup_{S, z} |I_S[f_S] - I_{S^{{i,z}}} [f_S^{i,z}]| \leq \beta + \frac{M}{n} \implies Pr[|I_S[f_S] - \mathbb{E}_S[  I_S[f_S]] | \geq \epsilon ] \leq 2 e^{\frac{-2n \epsilon^2}{(n\beta + M)^2} } </math>
 
-Switching the above bound to its confidence form and requiring to have confidence <math> 1 - \delta </math> yields <math> \epsilon </math> to be:
+Switching the above bound to its confidence form and requiring it to have confidence <math> 1 - \delta </math> yields <math> \epsilon </math> to be:
 
 <math> \epsilon = (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }</math>
 
-Therefore we have the probabilistic bound imply the following:
+Therefore, from the probabilistic bound implied by McDirmid's inequality we have:
 
-<math>  </math>
+<math>  |I_S[f_S] - \mathbb{E}_S[  I_S[f_S]] | \leq (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }  \implies I_S[f_S]  \leq \mathbb{E}_S[  I_S[f_S]]  + (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }  </math>
 
-== Final Result ==
+Which isn't exactly what we wanted to prove by the lemma. However we can subtract <math> \mathbb{E}_S[I[f_S]] </math> from both sides of the inequality to get it in the form of the original lemma statement. Doing that yields:
 
-If a learning algorithm <math>L </math> is uniformly stable and also has a bounded loss function, then with confidence <math> 1 - \delta </math>  the difference between the empirical risk and the generalization error will be upper bounded as follows:
+<math>I_S[f_S]  - \mathbb{E}_S[I[f_S]] \leq  \mathbb{E}_S[  I_S[f_S]] - \mathbb{E}_S[I[f_S]]  + (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }  </math>
 
-<math> I[f_S] - I_S[f_S] \leq \beta_n + (2n\beta_n + M) \sqrt{ \frac{ ln(   \frac{2}{\delta}  ) }{2n} }</math>
+Which will conclude the proof of the lemma if we can upper bound <math> \mathbb{E}_S[  I_S[f_S]] - \mathbb{E}_S[I[f_S]] </math>.
 
-Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{n} \right) </math>, then the upper bound becomes:
+Which is actually simple to show its upper bounded is <math> \beta </math>. First notice that:
 
-<math> I[f_S] - I_S[f_S] \leq O\left( \frac{ 1 }{ n } \right)</math>
+<math> \mathbb{E}_S[  I_S[f_S]] - \mathbb{E}_S[I[f_S]] = \mathbb{E}_z[\mathbb{E}_S[  I_S[f_S]]] - \mathbb{E}_S[I[f_S]] = \mathbb{E}_z[\mathbb{E}_S[  \frac{1}{n}\sum^n_{i=1} V(f,z_i)] ] - \mathbb{E}_S[ \mathbb{E}_z[V(f_S,z)]]</math>
 
-which clearly generalizes as n approaches infinity because the difference between the generalization error and empirical risk goes to zero.
+Then by linearity of expectation and some simple algebra we have:
+
+<math> \mathbb{E}_z[\mathbb{E}_S[  \frac{1}{n}\sum^n_{i=1} V(f,z_i) -  V(f_S,z) ]] = \mathbb{E}_z[\mathbb{E}_S[  \frac{1}{n}\sum^n_{i=1} \left( V(f_{S^{i,z}},z) -  V(f_S,z) )\right ]]</math>
+
+Then by stability we know that each term <math> V(f_{S^{i,z}},z) -  V(f_S,z) \leq \beta </math>. Thus:
+
+<math> \mathbb{E}_S[  I_S[f_S]] - \mathbb{E}_S[I[f_S]]  \leq \beta </math>
+
+Which concludes the proof of the lemma and shows that with confidence <math> 1 - \delta </math> we have:
+
+<math> \mathbb{E}_S[I[f_S]] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+
+= References =
+
+<ref> Lorenzo Rosasco, Tomaso Poggio: "Class slides Stability": http://www.mit.edu/~9.520/fall14/slides/class15/class15_stability.pdf</ref>

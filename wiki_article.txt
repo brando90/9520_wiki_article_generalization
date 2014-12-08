@@ -1,0 +1,19 @@
+--[[User:Brandojazz|Brandojazz]] ([[User talk:Brandojazz|talk]]) 01:57, 8 December 2014 (UTC){{User sandbox}}
+<!-- EDIT BELOW THIS LINE -->
+
+==Uniform Stability and Generalization of a Learning Algorithm==
+
+If a learning Algorithm <math>L </math> is uniformly stable as defined in the previous section, then it will generalize. In other words, if the algorithm is resistant to small perturbations in the training set as defined by uniform stability, then we can mathematically show that the algorithm will be able to predict well sample points that are inside our training set as well as the samples not in it.
+
+== Motivation ==
+
+Why would someone want their learning algorithm to be stable in any sense?
+One can intuitively motivate the concept of stability with the analogy of a scientific theory, where the power of our predictor lies in the predictive power of the scientific theory.
+If we had a good scientific theory and thus a good predictor, then it should have been able to see general trends in the data that inspired this theory.
+In other words, small changes to the data that inspired this theory, should not affect the theory as a whole to much, because the theory was able to extract the general trends effectively in a predictive manner.
+If it was a good theory in the first place, then small changes in the training data should not affect its success to predict unseen data samples.
+Similarly, if we have a learning algorithm that is able to generalize on unseen data points, then if the algorithm was "good" at learning from the data it had,
+then small perturbations on that data should not affect its predictive power too much.
+This intuitive idea can actually be made mathematically rigorous with uniform stability.
+If a learning algorithm is (uniformly) stable then, from the previous argument, it makes sense that it should have good predictive power on data it has already seen
+and data it has not yet seen. i.e. if the learning algorithm is stable, it should be able to generalize.

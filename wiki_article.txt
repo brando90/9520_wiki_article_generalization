@@ -44,25 +44,25 @@ where <math> \epsilon(n)</math> will be an upper bound that approaches zero as n
 
 Let's begin the proof by using the fact that our learning algorithm is uniformly stable. If the learning algorithm<math> L </math> is uniformly stable, then using McDirmid's inequality, and setting the generalization error to be the functional yields:
 
-<math>\forall (S, z) \in Z^{n+1}, \forall i \in \{1,...,n\}, \sup_{z' \in Z} | V(f_S , z' )-V(f_{S^{i,z} } , z' )|\leq\beta  \implies P( |I[f_S] - \mathbb{E}_S[f_S]|  \geq \epsilon ) \leq 2 e^{ \left( \frac{-2 \epsilon^2}{n \beta^2} \right) }</math>
+<math>\forall (S, z) \in Z^{n+1}, \forall i \in \{1,...,n\}, \sup_{z \in Z} | I[f_S]-I[f_{S^{i,z} } ]|\leq\beta  \implies P( |I[f_S] - \mathbb{E}_S[I[f_S]]|  \geq \epsilon ) \leq 2 e^{ \left( \frac{-2 \epsilon^2}{n \beta^2} \right) }</math>
 
-Which says that the generalization error will be close to the expected generalization error over training sets with high probability. If we change the above probabilistic statement to its confidence form and demand to have <math> 1 - \delta </math> confidence that <math> I[f_S] </math> and <math> \mathbb{E}_S[f_S] </math> are close, then after some lines of algebra its easy to verify that <math> \epsilon </math> must be at most:
+Which says that the generalization error will be close to the expected generalization error over training sets with high probability. If we change the above probabilistic statement to its confidence form and demand to have <math> 1 - \delta </math> confidence that <math> I[f_S] </math> and <math> \mathbb{E}_S[I[f_S]] </math> are close, then after the bound equal to <math> \delta </math> and some lines of algebra, its easy to verify that <math> \epsilon </math> must be at most:
 
-<math> e = n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+<math> \epsilon = n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
 
 Therefore, we have with confidence <math> 1 - \delta </math> that:
 
-<math> |I[f_S] - \mathbb{E}_S[f_S]|  \leq n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } }  \implies I[f_S]  \leq \mathbb{E}_S[f_S]  +  n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+<math> |I[f_S] - \mathbb{E}_S[I[f_S]]|  \leq n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } }  \implies I[f_S]  \leq \mathbb{E}_S[I[f_S]]  +  n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
 
 The above statement is an upper bound on the generalization error, which can be turned into the desired bound (i.e. one bounding the difference of the empirical risk and generalization error) easily by subtracting the empirical risk <math> I_S[f_S] </math> from both sides of the inequality yielding:
 
-<math> I[f_S]  - I_S[f_S] \leq \mathbb{E}_S[f_S] - I_S[f_S]  +  n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+<math> I[f_S]  - I_S[f_S] \leq \mathbb{E}_S[I[f_S]] - I_S[f_S]  +  n \beta \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
 
-the LHS is exactly what we need to conclude the proof, however we need to finish upper bounding the RHS, specifically we need to upper bound <math> \mathbb{E}_S[f_S] - I_S[f_S] </math> to conclude the proof.
+the LHS is exactly what we need to conclude the proof, however we need to finish upper bounding the RHS, specifically we need to upper bound <math> \mathbb{E}_S[I[f_S]] - I_S[f_S] </math> to conclude the proof.
 
-The upper bound for <math> \mathbb{E}_S[f_S] - I_S[f_S] </math> is exactly:
+The upper bound for <math> \mathbb{E}_S[I[f_S]] - I_S[f_S] </math> is exactly:
 
-<math> \mathbb{E}_S[f_S] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
+<math> \mathbb{E}_S[I[f_S]] - I_S[f_S] \leq \beta + (n \beta + M) \sqrt{\frac{ln(\frac{2}{\delta}) }{ 2n } } </math>
 
 where M is the upper on the loss function <math> V(f, z) </math>.
 
@@ -116,6 +116,10 @@ With this last result we can apply McDirmid's inequality and the constants <math
 Switching the above bound to its confidence form and requiring to have confidence <math> 1 - \delta </math> yields <math> \epsilon </math> to be:
 
 <math> \epsilon = (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }</math>
+
+Therefore we have the probabilistic bound imply the following:
+
+<math>  </math>
 
 == Final Result ==
 

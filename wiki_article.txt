@@ -1,12 +1,11 @@
 --[[User:Brandojazz|Brandojazz]] ([[User talk:Brandojazz|talk]]) 01:57, 8 December 2014 (UTC){{User sandbox}}
 <!-- EDIT BELOW THIS LINE -->
 
-==Uniform Stability and Generalization of a Learning Algorithm==
+= Uniform Stability and Generalization in learning theory =
 
-If a learning Algorithm <math>L </math> is uniformly stable as defined in the previous section, then it will generalize.
-In other words, if the algorithm is resistant to small perturbations in the training set as defined by uniform stability,
-then we can mathematically show that the algorithm will be able to make good predictions on sample points that are inside our training set
-as well as the samples not in it.
+The notion of [https://en.wikipedia.org/wiki/Stability_(learning_theory) stability] is one which captures how much a predictive function changes when the training set is changed slightly. When an algorithm is uniformly stable, intuitively, it means that the algorithm is resistant, in the "worst case", to a change in the training set. In other words, for all training sets and any changes to this training set, the predictive accuracy should not change in a noticeable way. Hence, since the algorithm didn't change that much, then its error shouldn't change (too much) either.
+
+In this article we will show that if a learning algorithm <math>L </math> is uniformly stable in a precise sense, then it will generalize. i.e. the error in the training set will be a true reflection of the quality of our predictions on unseen data points. In other words, if the algorithm is resistant to small perturbations in the training set as defined by uniform stability, then we can mathematically show that the learning algorithm will be able to make good predictions on sample points that are inside our training set as well as samples that are not.
 
 == Motivation ==
 
@@ -25,16 +24,27 @@ This intuitive idea can actually be made mathematically rigorous with uniform st
 If a learning algorithm is (uniformly) stable then, from the previous argument, it makes sense that it should have good predictive power
 on data it has already seen
 and data it has not yet seen. i.e. if the learning algorithm is stable, it should be able to generalize.
+= Preliminary definitions =
+This article can be heavy in notation and its important to clarify that. The notation has already been established in [https://en.wikipedia.org/wiki/Stability_%28learning_theory%29#Preliminary_definitions the following wikipedia article.] Please refer to that for details on the notation.
 
-== Final Result ==
+=Formal Definition of Uniform Stability=
+An algorithm <math>L</math> has [https://en.wikipedia.org/wiki/Stability_(learning_theory)#Uniform_Stability uniform stability] β with respect to the loss function V if the following holds:
+
+<math>\forall S\in Z^m, \forall i\in\{1,...,m\}, \sup_{z\in Z}|V(f_S,z)-V(f_{S^i},z)|\leq\beta</math>
+
+A probabilistic version of uniform stability β is:
+
+<math>\forall S\in Z^m, \forall i\in\{1,...,m\}, \mathbb{P}_S\{\sup_{z\in Z}|V(f_S,z)-V(f_{S^i},z)|\leq\beta\}\geq1-\delta</math>
+
+= Final Results of Uniform Stability and Generalization =
 
 If a learning algorithm <math>L </math> is uniformly stable and also has a bounded loss function, then with confidence <math> 1 - \delta </math>  the difference between the empirical risk and the generalization error will be upper bounded as follows:
 
 <math> I[f_S] - I_S[f_S] \leq \beta_n + (2n\beta_n + M) \sqrt{ \frac{ ln(   \frac{2}{\delta}  ) }{2n} }</math>
 
-Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{n} \right) </math>, then the upper bound becomes:
+Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{ \sqrt{n} } \right) </math>, then the upper bound becomes:
 
-<math> I[f_S] - I_S[f_S] \leq O\left( \frac{ 1 }{ n } \right)</math>
+<math> I[f_S] - I_S[f_S] \leq O\left( \frac{ 1 }{ \sqrt{n} } \right)</math>
 
 which clearly approaches zero as n approaches infinity. Therefore, the empirical risk is equal to the generalization error for sufficiently large and thus, the empirical risk is a good proxy for the generalization error. In this case, we say that the learning algorithm generalizes.
 
@@ -61,9 +71,9 @@ it can be shown that tikhonov regularization is uniformly stable. If that is tru
 
 To prove that Tikhonov regularization is stable we only need to show these three statements to be true:
 
-1) we assue that the loss is Lipschitz continuous: <math> |V(f_i(x), y') - V(f_2(x), y')| \leq L||f_1 - f_2 ||_{\infty} </math>
+1) we assume that the loss is Lipschitz continuous: <math> |V(f_i(x), y') - V(f_2(x), y')| \leq L||f_1 - f_2 ||_{\infty} </math>
 
-2) we need that the hypothesis class to be over reproducing kernel Hilbert spaces (RKHS): <math> ||f - f'||_{\infty} \leq \mathcal{k} ||f - f'||_{\mathbb{R}^K} </math> for any <math>f,f' \in \mathcal{H} </math>
+2) we need that the hypothesis class to be over reproducing kernel Hilbert spaces (RKHS): <math> ||f - f'||_{\infty} \leq \kappa ||f - f'||_{\mathbb{R}^K} </math> for any <math>f,f' \in \mathcal{H} </math>
 
 3) finally we need the following lemma to hold: <math> ||f^{\lambda}_{S} - f^{\lambda}_{S^{i,z}} ||^2_{\mathbb{R}^K} \leq \frac{L||f^{\lambda}_S - f^{\lambda}_{S^{i,z}} ||_{\infty} }{\lambda n} </math>
 
@@ -75,7 +85,7 @@ Therefore, with confidence <math> 1 - \delta </math>, tikhonov regularization ge
 
 ==== Remarks on Bound ====
 
-Notice that keeping <math>\lambda</math> fixed as n increases, the generalization tightens as <math> O \left( \frac{1}{n} \right) </math>.  However, fixing <math>\lambda</math> keeps our hypothesis spaced fixed. However, as we get more data, we want <math>\lambda</math> to get smaller. However, if <math>\lambda</math> gets smaller too quickly, then the bounds have the potential to become vacuous.
+Notice that keeping <math>\lambda</math> fixed as n increases, the generalization tightens as <math> O \left( \frac{1}{ \sqrt{n} } \right) </math>.  However, fixing <math>\lambda</math> keeps our hypothesis spaced fixed. However, as we get more data, we want <math>\lambda</math> to get smaller. However, if <math>\lambda</math> gets smaller too quickly, then the bounds have the potential to become vacuous.
 
 == Statement ==
 
@@ -93,7 +103,7 @@ where <math> \epsilon(n)</math> will be an upper bound that approaches zero as n
 
 === Proof ===
 
-Let's begin the proof by using the fact that our learning algorithm is uniformly stable. If the learning algorithm<math> L </math> is uniformly stable, then using McDirmid's inequality, and setting the generalization error to be the functional yields:
+Let's begin the proof by using the fact that our learning algorithm is uniformly stable. If the learning algorithm<math> L </math> is uniformly stable, then using McDiarmid's inequality, and setting the generalization error to be the functional yields:
 
 <math>\forall (S, z) \in Z^{n+1}, \forall i \in \{1,...,n\}, \sup_{z \in Z} | I[f_S]-I[f_{S^{i,z} } ]|\leq\beta  \implies P( |I[f_S] - \mathbb{E}_S[I[f_S]]|  \geq \epsilon ) \leq 2 e^{ \left( \frac{-2 \epsilon^2}{n \beta^2} \right) }</math>
 
@@ -133,7 +143,7 @@ For a bounded loss function <math> V(f, z) </math> (with upper bound M) and a un
 
 ===== Proof =====
 
-Notice that the above statement is the difference of <math> I_S[f_S] </math> and the expected value of a different quanity. This suggests that setting <math> I_S[f_S]</math> to be the functional in McDirmids inequality might be good first step to yield the above result. Thus, we wull use McDirmid's inequality and let the functional F in McDirmid's be <math> I_S[f_S] </math>.
+Notice that the above statement is the difference of <math> I_S[f_S] </math> and the expected value of a different quanity. This suggests that setting <math> I_S[f_S]</math> to be the functional in McDiarmids inequality might be good first step to yield the above result. Thus, we wull use McDiarmid's inequality and let the functional F in McDiarmid's be <math> I_S[f_S] </math>.
 If that is our choice of functional then we must show the following first
 
 <math> \forall i, \sup_{S, z} |I_S[f_S] - I_{S^{i,z} }[f_{S^{i,z}}]| \leq c_i</math>
@@ -160,7 +170,7 @@ Combining both terms yields the desired upper bound (to use McDirmad's afterward
 
 <math> \leq \frac{n-1}{n} \beta + \frac{M}{n}  \leq \beta + \frac{M}{n}</math>
 
-With this last result we can apply McDirmid's inequality and the constants <math> c_i</math> at the beginning of the lemma are <math>\beta + \frac{M}{n}, \forall i</math>. Thus we have:
+With this last result we can apply McDiarmid's inequality and the constants <math> c_i</math> at the beginning of the lemma are <math>\beta + \frac{M}{n}, \forall i</math>. Thus we have:
 
 <math> \forall i, \sup_{S, z} |I_S[f_S] - I_{S^{{i,z}}} [f_S^{i,z}]| \leq \beta + \frac{M}{n} \implies Pr[|I_S[f_S] - \mathbb{E}_S[  I_S[f_S]] | \geq \epsilon ] \leq 2 e^{\frac{-2n \epsilon^2}{(n\beta + M)^2} } </math>
 
@@ -168,7 +178,7 @@ Switching the above bound to its confidence form and requiring it to have confid
 
 <math> \epsilon = (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }</math>
 
-Therefore, from the probabilistic bound implied by McDirmid's inequality we have:
+Therefore, from the probabilistic bound implied by McDiarmid's inequality we have:
 
 <math>  |I_S[f_S] - \mathbb{E}_S[  I_S[f_S]] | \leq (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }  \implies I_S[f_S]  \leq \mathbb{E}_S[  I_S[f_S]]  + (n \beta + M) \sqrt{\frac{ln(   \frac{2}{\delta}   ) }{2n} }  </math>
 
@@ -199,3 +209,4 @@ Which concludes the proof of the lemma and shows that with confidence <math> 1 -
 <ref> Lorenzo Rosasco, Tomaso Poggio: "Class slides on Stability": http://www.mit.edu/~9.520/fall14/slides/class15/class15_stability.pdf</ref>
 <ref> Lorenzo Rosasco, Tomaso Poggio: "Class slides on Stability of Tikhonov ": http://www.mit.edu/~9.520/fall14/slides/class16/class16_stability.pdf</ref>
 <ref> Lorenzo Rosasco, Tomaso Poggio: "9.520: Statistical Learning Theory and Applications Fall 2014": http://www.mit.edu/~9.520/fall14/</ref>
+<ref> Rosasco, Lorenzo (2014). Consistency, Learnability and Regularization. Lecture Notes for MIT Course 9.520.</ref>

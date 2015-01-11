@@ -42,7 +42,7 @@ If a learning algorithm <math>L </math> is uniformly stable and also has a bound
 
 <math> I[f_S] - I_S[f_S] \leq \beta_n + (2n\beta_n + M) \sqrt{ \frac{ ln(   \frac{2}{\delta}  ) }{2n} }</math>
 
-Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{ \sqrt{n} } \right) </math>, then the upper bound becomes:
+Specifically, if one has a uniformly stable learning algorithm with <math> \beta_n = O \left( \frac{1}{ n } \right) </math>, then the upper bound becomes:
 
 <math> I[f_S] - I_S[f_S] \leq O\left( \frac{ 1 }{ \sqrt{n} } \right)</math>
 
